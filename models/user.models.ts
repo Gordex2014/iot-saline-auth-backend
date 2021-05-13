@@ -41,14 +41,12 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    roles: [
-      {
-        type: String,
-        required: [true, "At lease one role is required"],
-        default: "USER_DOCTOR_ROLE",
-        enum: ["USER_ADMIN_ROLE", "USER_DOCTOR_ROLE"],
-      },
-    ],
+    roles: {
+      type: [String],
+      required: [true, "At least one role is required"],
+      default: ["USER_DOCTOR_ROLE"],
+    },
+
     status: {
       type: Boolean,
       required: [true, "User status is required"],
@@ -74,4 +72,4 @@ const userSchema = new Schema(
   }
 );
 
-export const User = model<IUser>("Order", userSchema);
+export const User = model<IUser>("User", userSchema);

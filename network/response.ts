@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-export const success = (
+export const successResponse = (
   res: Response,
   message: string | object,
   status: number
@@ -18,7 +18,7 @@ export const clientError = (res: Response, message: string, status: number) => {
   });
 };
 
-export const error = (
+export const errorResponse = (
   res: Response,
   message: string,
   status: number,

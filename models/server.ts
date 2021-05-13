@@ -6,13 +6,14 @@ import "colors";
 
 import { dbConnection } from "../database/config.db";
 import { config } from "../config/config";
+import { userRouter } from "../routes";
 
 class Server {
   private app: Application;
   private port: string;
-  // private apiPaths: {
-  //   randomRoute: "/route"
-  // };
+  private apiPaths = {
+    userRoute: `${config.apiVersion}/users`,
+  };
 
   constructor() {
     this.app = express();
@@ -36,7 +37,7 @@ class Server {
   }
 
   private routes() {
-    // this.app.use(this.apiPaths.randomRoute, randomRouter)
+    this.app.use(this.apiPaths.userRoute, userRouter);
   }
 
   listen() {
