@@ -30,3 +30,17 @@ export const validateItemExistence = (
   }
   next();
 };
+
+export const validateCredentials = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errorsArray = validationResult(req);
+  const potentialError = errorsArray.array();
+  if (potentialError.length !== 0) {
+    const errorMessage = potentialError[0].msg;
+    return clientError(res, errorMessage, 401);
+  }
+  next();
+};

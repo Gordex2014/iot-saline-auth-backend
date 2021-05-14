@@ -6,13 +6,14 @@ import "colors";
 
 import { dbConnection } from "../database/config.db";
 import { config } from "../config/config";
-import { userRouter } from "../routes";
+import { authRouter, userRouter } from "../routes";
 
 class Server {
   private app: Application;
   private port: string;
   private apiPaths = {
     userRoute: `${config.apiVersion}/users`,
+    authRouter: `${config.apiVersion}/auth`,
   };
 
   constructor() {
@@ -38,6 +39,7 @@ class Server {
 
   private routes() {
     this.app.use(this.apiPaths.userRoute, userRouter);
+    this.app.use(this.apiPaths.authRouter, authRouter);
   }
 
   listen() {
