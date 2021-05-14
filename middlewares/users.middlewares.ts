@@ -1,15 +1,17 @@
 import { body, param } from "express-validator";
 import { validateUserInput, validateItemExistence } from "./fieldValidators";
 import {
-  validUserIdInDb,
-  userEmailAlreadyRegisteredInDb,
-  userUsernameAlreadyRegisteredInDb,
-  userMobileNumberAlreadyRegisteredInDb,
-} from "../helpers/dbValidators";
-import {
-  isArrayOfValidUserRoles,
+  eligibleForRolesAddition,
   isArrayOfStrings,
-} from "../helpers/typeCheckers";
+  isArrayOfValidUserRoles,
+  nonRepeatedRole,
+  userEmailAlreadyRegisteredInDb,
+  userMobileNumberAlreadyRegisteredInDb,
+  userUsernameAlreadyRegisteredInDb,
+  validAdminIdInDb,
+  validDoctorIdInDb,
+  validUserIdInDb,
+} from "../helpers";
 
 export const userCreationMiddleware = [
   body("email", "El correo es obligatorio").notEmpty(),
@@ -130,5 +132,32 @@ export const userModificationMiddleware = [
     }),
   validateUserInput,
   body("username").optional().custom(userUsernameAlreadyRegisteredInDb),
+  validateUserInput,
+];
+
+export const validDoctorIdMiddleware = [
+  param("id", "El id debe ser un id valido de mongo").isMongoId(),
+  validateUserInput,
+  param("id").custom(validDoctorIdInDb),
+  validateItemExistence,
+];
+
+export const validAdminIdMiddleware = [
+  param("id", "El id debe ser un id valido de mongo").isMongoId(),
+  validateUserInput,
+  param("id").custom(validAdminIdInDb),
+  validateItemExistence,
+];
+
+export const roleAdditionMiddleware = [
+  param("id", "El id debe ser un id valido de mongo").isMongoId(),
+  validateUserInput,
+  param("id").custom(validUserIdInDb),
+  validateItemExistence,
+  param("id").custom(eligibleForRolesAddition),
+  validateUserInput,
+  body("role", "Se debe agregar el campo de rol").notEmpty(),
+  validateUserInput,
+  body("role").custom(nonRepeatedRole),
   validateUserInput,
 ];

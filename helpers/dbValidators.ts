@@ -1,5 +1,5 @@
 import { CustomValidator } from "express-validator";
-import { User } from "../models/user.models";
+import { IUser, User } from "../models";
 
 export const validUserIdInDb: CustomValidator = async (id: string, { req }) => {
   const user = await User.findById(id);
@@ -12,6 +12,40 @@ export const validUserIdInDb: CustomValidator = async (id: string, { req }) => {
     );
   }
   req.user = user;
+  return true;
+};
+
+export const validDoctorIdInDb: CustomValidator = async (
+  id: string,
+  { req }
+) => {
+  const doctor = await User.findOne({ _id: id, roles: "USER_DOCTOR_ROLE" });
+  if (!doctor) {
+    throw new Error(`Doctor con id ${id} no encontrado`);
+  }
+  if (!doctor.status) {
+    throw new Error(
+      `Doctor con id ${id} restringido, póngase en contacto con un administrador`
+    );
+  }
+  req.user = doctor;
+  return true;
+};
+
+export const validAdminIdInDb: CustomValidator = async (
+  id: string,
+  { req }
+) => {
+  const admin = await User.findOne({ _id: id, roles: "USER_ADMIN_ROLE" });
+  if (!admin) {
+    throw new Error(`Admin con id ${id} no encontrado`);
+  }
+  if (!admin.status) {
+    throw new Error(
+      `Admin con id ${id} restringido, póngase en contacto con un administrador`
+    );
+  }
+  req.user = admin;
   return true;
 };
 
@@ -43,6 +77,20 @@ export const userMobileNumberAlreadyRegisteredInDb: CustomValidator = async (
   const mobileNumberExists = await User.findOne({ mobileNumber });
   if (mobileNumberExists) {
     throw new Error(`El teléfono ${mobileNumber} ya se encuentra registrado`);
+  }
+  return true;
+};
+
+export const eligibleForRolesAddition: CustomValidator = async (
+  id: string,
+  { req }
+) => {
+  const user = req.user as IUser;
+  const rolesArray = user.roles!;
+  if (rolesArray.length > 1) {
+    throw new Error(
+      `El usuario con id ${id} ya tiene la cantidad máxima de roles permitidos`
+    );
   }
   return true;
 };
