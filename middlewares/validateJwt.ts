@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-
 import { config } from "../config/config";
 import { IUser, User } from "../models";
-import { clientError, errorResponse } from "../network/response";
-import { UserRole, Headers, JwtPayload } from "../types";
+import { clientError } from "../network/response";
+import { Headers, JwtPayload, UserRole } from "../types";
 
 export const validateJwt = (rolesRequired: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -12,8 +11,9 @@ export const validateJwt = (rolesRequired: UserRole[]) => {
     if (!token) {
       return clientError(res, "No existe un token en la petición", 401);
     }
-    const { id } = jwt.verify(token, config.jwtSecret) as JwtPayload;
+
     try {
+      const { id } = jwt.verify(token, config.jwtSecret) as JwtPayload;
       let user: IUser | null = null;
       if (rolesRequired.includes("USER_ADMIN_ROLE") && user === null) {
         user = await User.findOne({ _id: id, roles: "USER_ADMIN_ROLE" });
@@ -32,12 +32,7 @@ export const validateJwt = (rolesRequired: UserRole[]) => {
       req.activeUser = user;
       next();
     } catch (error) {
-      errorResponse(
-        res,
-        "Por favor, póngase en contacto con un administrador",
-        500,
-        error
-      );
+      clientError(res, "Token inválido", 401);
     }
   };
 };

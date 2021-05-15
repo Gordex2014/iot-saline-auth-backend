@@ -15,27 +15,67 @@ import {
   userCreationMiddleware,
   userModificationMiddleware,
   validAdminIdMiddleware,
+  validateJwt,
   validDoctorIdMiddleware,
 } from "../middlewares";
 
 const router = Router();
 
-router.get("/doctors", listDoctors);
+router.get(
+  "/doctors",
+  validateJwt(["USER_ADMIN_ROLE", "USER_DOCTOR_ROLE"]),
+  listDoctors
+);
 
-router.get("/doctors/:id", validDoctorIdMiddleware, getDoctorById);
+router.get(
+  "/doctors/:id",
+  validateJwt(["USER_ADMIN_ROLE", "USER_DOCTOR_ROLE"]),
+  validDoctorIdMiddleware,
+  getDoctorById
+);
 
-router.get("/admins", listAdmins);
+router.get("/admins", validateJwt(["USER_ADMIN_ROLE"]), listAdmins);
 
-router.get("/admins/:id", validAdminIdMiddleware, getAdminById);
+router.get(
+  "/admins/:id",
+  validateJwt(["USER_ADMIN_ROLE"]),
+  validAdminIdMiddleware,
+  getAdminById
+);
 
-router.post("/", userCreationMiddleware, createUser);
+router.post(
+  "/",
+  validateJwt(["USER_ADMIN_ROLE"]),
+  userCreationMiddleware,
+  createUser
+);
 
-router.put("/:id", userModificationMiddleware, updateUser);
+router.put(
+  "/:id",
+  validateJwt(["USER_ADMIN_ROLE"]),
+  userModificationMiddleware,
+  updateUser
+);
 
-router.patch("/roles/:id", roleAdditionMiddleware, addPrivilege);
+router.patch(
+  "/roles/:id",
+  validateJwt(["USER_ADMIN_ROLE"]),
+  roleAdditionMiddleware,
+  addPrivilege
+);
 
-router.delete("/doctors/:id", validDoctorIdMiddleware, deleteDoctor);
+router.delete(
+  "/doctors/:id",
+  validateJwt(["USER_ADMIN_ROLE"]),
+  validDoctorIdMiddleware,
+  deleteDoctor
+);
 
-router.delete("/admins/:id", validAdminIdMiddleware, deleteAdmin);
+router.delete(
+  "/admins/:id",
+  validateJwt(["USER_ADMIN_ROLE"]),
+  validAdminIdMiddleware,
+  deleteAdmin
+);
 
 export default router;

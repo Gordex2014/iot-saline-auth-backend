@@ -10,7 +10,7 @@ type LoginBody = {
   password: string;
 };
 
-export const userLogin = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const {
     password: storedPassword,
     _id,
@@ -27,6 +27,31 @@ export const userLogin = async (req: Request, res: Response) => {
   if (!passwordComparisonResult) {
     return clientError(res, "Usuario o contraseña no válidos", 401);
   }
+
+  const token = await generateJWT(_id);
+
+  if (roles?.length === 2) {
+    const returnObj = loginReturnObject(
+      "USER_ADMIN_ROLE",
+      firstName,
+      lastName,
+      _id,
+      token
+    );
+    return successResponse(res, returnObj, 200);
+  }
+  const returnObj = loginReturnObject(
+    roles![0],
+    firstName,
+    lastName,
+    _id,
+    token
+  );
+  successResponse(res, returnObj, 200);
+};
+
+export const renewUser = async (req: Request, res: Response) => {
+  const { _id, roles, firstName, lastName } = req.activeUser as IUser;
 
   const token = await generateJWT(_id);
 

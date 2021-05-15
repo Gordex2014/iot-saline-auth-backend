@@ -1,10 +1,16 @@
 import { Router } from "express";
-import { userLogin } from "../controllers/auth.controllers";
+import { loginUser, renewUser } from "../controllers/auth.controllers";
 
-import { loginMiddleware } from "../middlewares";
+import { loginMiddleware, validateJwt } from "../middlewares";
 
 const router = Router();
 
-router.post("/login", loginMiddleware, userLogin);
+router.post("/login", loginMiddleware, loginUser);
+
+router.get(
+  "/renew",
+  validateJwt(["USER_ADMIN_ROLE", "USER_DOCTOR_ROLE"]),
+  renewUser
+);
 
 export default router;
