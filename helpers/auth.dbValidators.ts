@@ -1,11 +1,13 @@
 import { CustomValidator } from "express-validator";
 import { User } from "../models";
 
-export const validUsernameInDb: CustomValidator = async (
-  username: string,
+export const validCredentialInDb: CustomValidator = async (
+  credential: string,
   { req }
 ) => {
-  const user = await User.findOne({ username });
+  const user = await User.findOne({
+    $or: [{ username: credential }, { email: credential }],
+  });
   if (!user) {
     throw new Error(`Usuario o contraseña no válidos`);
   }

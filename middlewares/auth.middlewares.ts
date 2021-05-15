@@ -1,13 +1,13 @@
 import { body } from "express-validator";
 
 import { validateUserInput, validateCredentials } from "./fieldValidators";
-import { validUsernameInDb } from "../helpers";
+import { validCredentialInDb } from "../helpers";
 
 export const loginMiddleware = [
-  body("username", "El nombre de usuario es requerido").notEmpty(),
+  body("credential", "El credencial de usuario es requerido").notEmpty(),
   validateUserInput,
   body("password", "La contraseña es requerida").notEmpty(),
   validateUserInput,
-  body("username").custom(validUsernameInDb),
+  body("credential").custom(validCredentialInDb),
   validateCredentials,
 ];
