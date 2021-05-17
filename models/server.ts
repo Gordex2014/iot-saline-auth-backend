@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import os from "os";
 import "colors";
 
 import { dbConnection } from "../database/config.db";
@@ -41,6 +42,9 @@ class Server {
   private routes() {
     this.app.use(this.apiPaths.userRoute, userRouter);
     this.app.use(this.apiPaths.authRouter, authRouter);
+    this.app.get("/*", (req, res) => {
+      res.redirect(config.serverUrl);
+    });
   }
 
   listen() {

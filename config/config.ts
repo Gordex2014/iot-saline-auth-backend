@@ -7,4 +7,5 @@ export const config = {
   port: process.env.PORT || "8080",
   dbUrl: process.env.MONGODB_URL || "mongodb://localhost:27017/auth",
   jwtSecret: process.env.SECRETKEY || "development",
+  serverUrl: process.env.HOST_URL || "http://localhost:8080",
 };
