@@ -1,3 +1,4 @@
+import path from "path";
 import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -31,7 +32,7 @@ class Server {
 
   private middlewares() {
     this.app.use(express.json());
-    this.app.use(express.static("public"));
+    this.app.use(express.static(path.join(__dirname, "../public")));
     this.app.use(cors());
     this.app.use(helmet());
     this.app.use(morgan("tiny"));
