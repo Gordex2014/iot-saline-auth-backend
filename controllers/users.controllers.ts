@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 
 import { IUser, User } from "../models";
-import { successResponse, errorResponse } from "../network/response";
+import {
+  successResponse,
+  errorResponse,
+  clientError,
+} from "../network/response";
 import { saltedPassword } from "../helpers";
 import { UserRole } from "../types";
 
@@ -69,19 +73,23 @@ export const createUser = async (req: Request, res: Response) => {
 
   try {
     await user.save();
-    successResponse(res, user, 200);
+    successResponse(res, user, 201);
   } catch (error) {
     errorResponse(res, "Por favor contáctese con un administrador", 500, error);
   }
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { _id, __v, status, password, ...data } = req.body as IUser;
+  const { _id, __v, status, ...data } = req.body as IUser;
   const { id } = req.params;
 
+  if (data.password) {
+    data.password = saltedPassword(data.password!);
+  }
+
   try {
-    const newUser = await User.findByIdAndUpdate(id, data, { new: true });
-    successResponse(res, newUser as object, 204);
+    await User.findByIdAndUpdate(id, data);
+    successResponse(res, "Usuario Modificado", 204);
   } catch (error) {
     errorResponse(res, "Por favor contáctese con un administrador", 500, error);
   }
@@ -121,6 +129,11 @@ export const deleteDoctor = async (req: Request, res: Response) => {
 export const deleteAdmin = async (req: Request, res: Response) => {
   const { id } = req.params;
   const admin = req.user as IUser;
+  const { _id: activeUserId } = req.activeUser as IUser;
+
+  if (JSON.stringify(id) === JSON.stringify(activeUserId)) {
+    return clientError(res, "No puede eliminar su propia cuenta", 401);
+  }
 
   try {
     if (admin.roles!.length > 1) {

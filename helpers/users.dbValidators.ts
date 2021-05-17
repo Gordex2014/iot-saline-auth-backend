@@ -59,6 +59,18 @@ export const userEmailAlreadyRegisteredInDb: CustomValidator = async (
   return true;
 };
 
+export const userEmailAlreadyRegisteredInDbForUpdate: CustomValidator = async (
+  email: string,
+  { req }
+) => {
+  const user = req.user;
+  const emailExists = await User.findOne({ email });
+  if (emailExists && emailExists.email !== user.email) {
+    throw new Error(`El correo ${email} ya se encuentra registrado`);
+  }
+  return true;
+};
+
 export const userUsernameAlreadyRegisteredInDb: CustomValidator = async (
   username: string
 ) => {
@@ -71,6 +83,18 @@ export const userUsernameAlreadyRegisteredInDb: CustomValidator = async (
   return true;
 };
 
+export const userUsernameAlreadyRegisteredInDbForUpdate: CustomValidator =
+  async (username: string, { req }) => {
+    const user = req.user;
+    const usernameExists = await User.findOne({ username });
+    if (usernameExists && usernameExists.username !== user.username) {
+      throw new Error(
+        `El nombre de usuario ${username} ya se encuentra registrado`
+      );
+    }
+    return true;
+  };
+
 export const userMobileNumberAlreadyRegisteredInDb: CustomValidator = async (
   mobileNumber: number
 ) => {
@@ -80,6 +104,19 @@ export const userMobileNumberAlreadyRegisteredInDb: CustomValidator = async (
   }
   return true;
 };
+
+export const userMobileNumberAlreadyRegisteredInDbForUpdate: CustomValidator =
+  async (mobileNumber: number, { req }) => {
+    const user = req.user;
+    const mobileNumberExists = await User.findOne({ mobileNumber });
+    if (
+      mobileNumberExists &&
+      mobileNumberExists.mobileNumber !== user.mobileNumber
+    ) {
+      throw new Error(`El teléfono ${mobileNumber} ya se encuentra registrado`);
+    }
+    return true;
+  };
 
 export const eligibleForRolesAddition: CustomValidator = async (
   id: string,

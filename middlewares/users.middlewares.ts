@@ -6,8 +6,11 @@ import {
   isArrayOfValidUserRoles,
   nonRepeatedRole,
   userEmailAlreadyRegisteredInDb,
+  userEmailAlreadyRegisteredInDbForUpdate,
   userMobileNumberAlreadyRegisteredInDb,
+  userMobileNumberAlreadyRegisteredInDbForUpdate,
   userUsernameAlreadyRegisteredInDb,
+  userUsernameAlreadyRegisteredInDbForUpdate,
   validAdminIdInDb,
   validDoctorIdInDb,
   validUserIdInDb,
@@ -81,7 +84,7 @@ export const userModificationMiddleware = [
   validateUserInput,
   body("email", "Se debe ingresar un correo valido").optional().isEmail(),
   validateUserInput,
-  body("email").optional().custom(userEmailAlreadyRegisteredInDb),
+  body("email").optional().custom(userEmailAlreadyRegisteredInDbForUpdate),
   validateUserInput,
   body("firstName", "El nombre es requerido").optional().notEmpty(),
   validateUserInput,
@@ -111,7 +114,9 @@ export const userModificationMiddleware = [
     .optional()
     .isMobilePhone("es-BO"),
   validateUserInput,
-  body("mobileNumber").optional().custom(userMobileNumberAlreadyRegisteredInDb),
+  body("mobileNumber")
+    .optional()
+    .custom(userMobileNumberAlreadyRegisteredInDbForUpdate),
   validateUserInput,
   body("roles", "Los roles son requeridos").optional().notEmpty(),
   validateUserInput,
@@ -131,7 +136,17 @@ export const userModificationMiddleware = [
       min: 6,
     }),
   validateUserInput,
-  body("username").optional().custom(userUsernameAlreadyRegisteredInDb),
+  body("username")
+    .optional()
+    .custom(userUsernameAlreadyRegisteredInDbForUpdate),
+  validateUserInput,
+  body("password").optional().notEmpty(),
+  validateUserInput,
+  body("password", "La contraseña debe ser de al menos 6 caracteres")
+    .optional()
+    .isLength({
+      min: 6,
+    }),
   validateUserInput,
 ];
 

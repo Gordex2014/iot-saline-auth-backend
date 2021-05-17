@@ -17,6 +17,7 @@ export const loginUser = async (req: Request, res: Response) => {
     roles,
     firstName,
     lastName,
+    imageUrl,
   } = req.user as IUser;
   const { password } = req.body as LoginBody;
 
@@ -35,6 +36,7 @@ export const loginUser = async (req: Request, res: Response) => {
       "USER_ADMIN_ROLE",
       firstName,
       lastName,
+      imageUrl,
       _id,
       token
     );
@@ -44,6 +46,7 @@ export const loginUser = async (req: Request, res: Response) => {
     roles![0],
     firstName,
     lastName,
+    imageUrl,
     _id,
     token
   );
@@ -51,7 +54,7 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const renewUser = async (req: Request, res: Response) => {
-  const { _id, roles, firstName, lastName } = req.activeUser as IUser;
+  const { _id, roles, firstName, lastName, imageUrl } = req.activeUser as IUser;
 
   const token = await generateJWT(_id);
 
@@ -60,6 +63,7 @@ export const renewUser = async (req: Request, res: Response) => {
       "USER_ADMIN_ROLE",
       firstName,
       lastName,
+      imageUrl,
       _id,
       token
     );
@@ -69,6 +73,7 @@ export const renewUser = async (req: Request, res: Response) => {
     roles![0],
     firstName,
     lastName,
+    imageUrl,
     _id,
     token
   );
@@ -79,6 +84,7 @@ const loginReturnObject = (
   role: UserRole,
   firstName: string,
   lastName: string,
+  imageUrl: string,
   id: string,
   token: string
 ) => {
@@ -87,6 +93,7 @@ const loginReturnObject = (
     role,
     firstName,
     lastName,
+    imageUrl,
     token,
   };
 };
