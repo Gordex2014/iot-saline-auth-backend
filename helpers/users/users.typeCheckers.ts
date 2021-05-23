@@ -1,6 +1,6 @@
 import { CustomValidator } from "express-validator";
-import { IUser } from "../models";
-import { UserRoleEnum } from "../types";
+import { IUser } from "../../models";
+import { UserRoleEnum } from "../../types";
 
 export const isArrayOfStrings: CustomValidator = (inputArray: any[]) => {
   inputArray.forEach((arrayElement) => {

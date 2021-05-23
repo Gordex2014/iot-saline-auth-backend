@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { validateUserInput, validateItemExistence } from "./fieldValidators";
+import { validateUserInput, validateItemExistence } from "../fieldValidators";
 import {
   eligibleForRolesAddition,
   isArrayOfStrings,
@@ -14,7 +14,7 @@ import {
   validAdminIdInDb,
   validDoctorIdInDb,
   validUserIdInDb,
-} from "../helpers";
+} from "../../helpers";
 
 export const userCreationMiddleware = [
   body("email", "El correo es obligatorio").notEmpty(),

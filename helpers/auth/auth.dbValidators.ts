@@ -1,5 +1,5 @@
 import { CustomValidator } from "express-validator";
-import { User } from "../models";
+import { User } from "../../models";
 
 export const validCredentialInDb: CustomValidator = async (
   credential: string,

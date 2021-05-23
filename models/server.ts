@@ -3,19 +3,25 @@ import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import os from "os";
 import "colors";
 
 import { dbConnection } from "../database/config.db";
 import { config } from "../config/config";
-import { authRouter, userRouter } from "../routes";
+import {
+  authRouter,
+  patientsRouter,
+  recordsRouter,
+  usersRouter,
+} from "../routes";
 
 class Server {
   private app: Application;
   private port: string;
   private apiPaths = {
-    userRoute: `${config.apiVersion}/users`,
     authRouter: `${config.apiVersion}/auth`,
+    patientsRouter: `${config.apiVersion}/patients`,
+    recordsRouter: `${config.apiVersion}/records`,
+    usersRouter: `${config.apiVersion}/users`,
   };
 
   constructor() {
@@ -40,8 +46,10 @@ class Server {
   }
 
   private routes() {
-    this.app.use(this.apiPaths.userRoute, userRouter);
     this.app.use(this.apiPaths.authRouter, authRouter);
+    this.app.use(this.apiPaths.patientsRouter, patientsRouter);
+    this.app.use(this.apiPaths.recordsRouter, recordsRouter);
+    this.app.use(this.apiPaths.usersRouter, usersRouter);
     this.app.get("/*", (req, res) => {
       res.redirect(config.serverUrl);
     });

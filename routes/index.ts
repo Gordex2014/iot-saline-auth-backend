@@ -1,4 +1,6 @@
 import authRouter from "./auth.routes";
-import userRouter from "./users.routes";
+import patientsRouter from "./patients.routes";
+import recordsRouter from "./records.routes";
+import usersRouter from "./users.routes";
 
-export { authRouter, userRouter };
+export { authRouter, usersRouter, patientsRouter, recordsRouter };

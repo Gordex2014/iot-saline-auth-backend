@@ -1,7 +1,7 @@
 import { model, Schema, Document } from "mongoose";
 import { IUser } from "./user.models";
 import { Gender, PatientRole } from "../types";
-import { IRecord } from "./record.models";
+import { IClinicalHistory } from "./clinicalHistory.models";
 
 export interface IPatient extends Document {
   createdBy: IUser["_id"];
@@ -12,8 +12,8 @@ export interface IPatient extends Document {
   imageUrl: string;
   lastModifiedBy: IUser["_id"];
   lastName: string;
-  mobileNumber: string;
-  record?: IRecord["_id"];
+  mobileNumber: number;
+  clinicalHistoryId?: IClinicalHistory["_id"];
   roles?: PatientRole;
   status?: boolean;
 }
@@ -35,6 +35,7 @@ const patientSchema = new Schema(
     },
     gender: {
       type: String,
+      enum: ["male", "female"],
       required: [true, "it is necessary to know the gender of the patient"],
     },
     imageUrl: {
@@ -53,9 +54,10 @@ const patientSchema = new Schema(
       required: [true, "Mobile number is required"],
       unique: true,
     },
-    record: {
+    clinicalHistoryId: {
       type: Schema.Types.ObjectId,
-      ref: "Record",
+      ref: "ClinicalHistory",
+      required: [true, "Clinical history reference is required"],
     },
     roles: {
       type: String,
@@ -73,6 +75,8 @@ const patientSchema = new Schema(
     toJSON: {
       transform: function (document: IPatient, returnedJSON: IPatient) {
         returnedJSON.id = document._id;
+        if (document.gender === "female") returnedJSON.gender = "Femenino";
+        if (document.gender === "male") returnedJSON.gender = "Masculino";
         delete returnedJSON.status;
         delete returnedJSON.roles;
         delete returnedJSON._id;

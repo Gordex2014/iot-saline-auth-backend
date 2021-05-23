@@ -1,5 +1,5 @@
 import { CustomValidator } from "express-validator";
-import { IUser, User } from "../models";
+import { IUser, User } from "../../models";
 
 export const validUserIdInDb: CustomValidator = async (id: string, { req }) => {
   const user = await User.findById(id);
