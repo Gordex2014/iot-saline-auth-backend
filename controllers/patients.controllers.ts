@@ -31,11 +31,11 @@ export const getPatientById = async (req: Request, res: Response) => {
 };
 
 export const createPatient = async (req: Request, res: Response) => {
-  const { _id, __v, status, roles, lastModifiedBy, ...data } =
-    req.body as IPatient;
+  const { _id, __v, status, roles, ...data } = req.body as IPatient;
   const { _id: activeUserId } = req.activeUser as IUser;
 
   data.createdBy = activeUserId;
+  data.lastModifiedBy = activeUserId;
   const patient = new Patient(data);
   const clinicalHistory = new ClinicalHistory({ patientId: patient._id });
   patient.clinicalHistoryId = clinicalHistory._id;

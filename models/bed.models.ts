@@ -20,7 +20,6 @@ const bedSchema = new Schema(
     },
     locationReference: {
       type: String,
-      required: [true, "Location reference for bed is required"],
     },
   },
   {

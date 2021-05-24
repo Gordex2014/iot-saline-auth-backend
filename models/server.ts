@@ -9,8 +9,10 @@ import { dbConnection } from "../database/config.db";
 import { config } from "../config/config";
 import {
   authRouter,
+  bedsRouter,
   patientsRouter,
   recordsRouter,
+  roomsRouter,
   usersRouter,
 } from "../routes";
 
@@ -19,8 +21,10 @@ class Server {
   private port: string;
   private apiPaths = {
     authRouter: `${config.apiVersion}/auth`,
+    bedsRouter: `${config.apiVersion}/beds`,
     patientsRouter: `${config.apiVersion}/patients`,
     recordsRouter: `${config.apiVersion}/records`,
+    roomsRouter: `${config.apiVersion}/rooms`,
     usersRouter: `${config.apiVersion}/users`,
   };
 
@@ -47,8 +51,10 @@ class Server {
 
   private routes() {
     this.app.use(this.apiPaths.authRouter, authRouter);
+    this.app.use(this.apiPaths.bedsRouter, bedsRouter);
     this.app.use(this.apiPaths.patientsRouter, patientsRouter);
     this.app.use(this.apiPaths.recordsRouter, recordsRouter);
+    this.app.use(this.apiPaths.roomsRouter, roomsRouter);
     this.app.use(this.apiPaths.usersRouter, usersRouter);
     this.app.get("/*", (req, res) => {
       res.redirect(config.serverUrl);

@@ -23,7 +23,6 @@ const roomSchema = new Schema(
     },
     locationReference: {
       type: String,
-      required: [true, "Location reference is required"],
     },
   },
   {
