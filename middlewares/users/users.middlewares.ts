@@ -1,5 +1,6 @@
 import { body, param } from "express-validator";
 import { validateUserInput, validateItemExistence } from "../fieldValidators";
+import { stringToArray } from "../../helpers/generalSanitizers";
 import {
   eligibleForRolesAddition,
   isArrayOfStrings,
@@ -54,6 +55,7 @@ export const userCreationMiddleware = [
   validateUserInput,
   body("roles", "Los roles son requeridos").optional().notEmpty(),
   validateUserInput,
+  body("roles").customSanitizer(stringToArray),
   body("roles", "Los roles deben ser provistos en un array")
     .optional()
     .isArray(),

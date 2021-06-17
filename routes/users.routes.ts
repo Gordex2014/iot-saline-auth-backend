@@ -10,6 +10,7 @@ import {
   listDoctors,
   updateUser,
 } from "../controllers/users.controllers";
+import { upload } from "../helpers/multerUtil";
 import {
   roleAdditionMiddleware,
   userCreationMiddleware,
@@ -45,6 +46,7 @@ router.get(
 
 router.post(
   "/",
+  upload.single("imageFile"),
   validateJwt(["USER_ADMIN_ROLE"]),
   userCreationMiddleware,
   createUser
@@ -52,6 +54,7 @@ router.post(
 
 router.put(
   "/:id",
+  upload.single("imageFile"),
   validateJwt(["USER_ADMIN_ROLE"]),
   userModificationMiddleware,
   updateUser

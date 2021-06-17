@@ -25,6 +25,7 @@ class Server {
     patientsRouter: `${config.apiVersion}/patients`,
     recordsRouter: `${config.apiVersion}/records`,
     roomsRouter: `${config.apiVersion}/rooms`,
+    uploadsRouter: `${config.apiVersion}/uploads`,
     usersRouter: `${config.apiVersion}/users`,
   };
 
@@ -42,6 +43,7 @@ class Server {
   }
 
   private middlewares() {
+    this.app.use(express.urlencoded());
     this.app.use(express.json());
     this.app.use(express.static(path.join(__dirname, "../public")));
     this.app.use(cors());
