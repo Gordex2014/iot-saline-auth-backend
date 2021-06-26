@@ -6,6 +6,7 @@ import {
   listPatients,
   updatePatient,
 } from "../controllers/patients.controllers";
+import { upload } from "../helpers/multerUtil";
 import {
   patientCreationMiddleware,
   patientUpdateMiddleware,
@@ -21,9 +22,19 @@ router.get("/", listPatients);
 
 router.get("/:id", validPatientMiddleware, getPatientById);
 
-router.post("/", patientCreationMiddleware, createPatient);
+router.post(
+  "/",
+  upload.single("imageFile"),
+  patientCreationMiddleware,
+  createPatient
+);
 
-router.put("/:id", patientUpdateMiddleware, updatePatient);
+router.put(
+  "/:id",
+  upload.single("imageFile"),
+  patientUpdateMiddleware,
+  updatePatient
+);
 
 router.delete("/:id", validPatientMiddleware, deletePatient);
 

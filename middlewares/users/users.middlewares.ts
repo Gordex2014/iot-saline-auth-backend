@@ -55,7 +55,7 @@ export const userCreationMiddleware = [
   validateUserInput,
   body("roles", "Los roles son requeridos").optional().notEmpty(),
   validateUserInput,
-  body("roles").customSanitizer(stringToArray),
+  body("roles").optional().customSanitizer(stringToArray),
   body("roles", "Los roles deben ser provistos en un array")
     .optional()
     .isArray(),

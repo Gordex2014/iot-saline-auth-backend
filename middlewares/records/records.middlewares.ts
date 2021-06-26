@@ -1,5 +1,10 @@
 import { body, param } from "express-validator";
-import { validPatientIdInDb, validRecordIdInDb } from "../../helpers";
+import {
+  isValidDate,
+  stringToDate,
+  validPatientIdInDb,
+  validRecordIdInDb,
+} from "../../helpers";
 import { validateItemExistence, validateUserInput } from "../fieldValidators";
 
 export const recordCreationMiddleware = [
@@ -14,7 +19,8 @@ export const recordCreationMiddleware = [
   validateItemExistence,
   body("dateTime", "La fecha es requerida").notEmpty(),
   validateUserInput,
-  body("dateTime", "Se debe ingresar una fecha válida").isDate(),
+  body("dateTime").customSanitizer(stringToDate),
+  body("dateTime", "Se debe ingresar una fecha válida").custom(isValidDate),
   validateUserInput,
   body("medicalCondition", "La condición médica es requerida").notEmpty(),
   validateUserInput,
@@ -30,7 +36,8 @@ export const recordUpdateMiddleware = [
   validateItemExistence,
   body("dateTime", "La fecha es requerida").optional().notEmpty(),
   validateUserInput,
-  body("dateTime", "Se debe ingresar una fecha válida").optional().isDate(),
+  body("dateTime").customSanitizer(stringToDate),
+  body("dateTime", "Se debe ingresar una fecha válida").optional().custom(isValidDate),
   validateUserInput,
   body("medicalCondition", "La condición médica es requerida")
     .optional()

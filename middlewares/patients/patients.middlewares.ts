@@ -1,8 +1,10 @@
 import { body, param } from "express-validator";
 import {
+  isValidDate,
   isValidGender,
   patientCellphoneRegistered,
   patientCellphoneRegisteredForUpdate,
+  stringToDate,
   toCapitalizeFirstLetter,
   toEnglishGenderTermn,
   validPatientIdInDb,
@@ -20,7 +22,8 @@ export const patientCreationMiddleware = [
   validateUserInput,
   body("dateOfBirth", "La fecha es requerida").notEmpty(),
   validateUserInput,
-  body("dateOfBirth", "Se debe ingresar una fecha válida").isDate(),
+  body("dateOfBirth").customSanitizer(stringToDate),
+  body("dateOfBirth", "Se debe ingresar una fecha válida").custom(isValidDate),
   validateUserInput,
   body("gender", "El género es requerido").notEmpty(),
   validateUserInput,
@@ -66,7 +69,10 @@ export const patientUpdateMiddleware = [
   validateUserInput,
   body("dateOfBirth", "La fecha es requerida").optional().notEmpty(),
   validateUserInput,
-  body("dateOfBirth", "Se debe ingresar una fecha válida").optional().isDate(),
+  body("dateOfBirth").optional().customSanitizer(stringToDate),
+  body("dateOfBirth", "Se debe ingresar una fecha válida")
+    .optional()
+    .custom(isValidDate),
   validateUserInput,
   body("gender", "El género es requerido").optional().notEmpty(),
   validateUserInput,

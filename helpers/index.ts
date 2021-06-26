@@ -1,5 +1,6 @@
 export * from "./auth/auth.dbValidators";
 export * from "./beds/beds.dbValidators";
+export * from "./general.validators"
 export * from "./generalSanitizers";
 export * from "./jwtGeneration";
 export * from "./passwordUtils";
