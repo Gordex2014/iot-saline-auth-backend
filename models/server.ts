@@ -59,7 +59,7 @@ class Server {
     this.app.use(this.apiPaths.roomsRouter, roomsRouter);
     this.app.use(this.apiPaths.usersRouter, usersRouter);
     this.app.get("/*", (req, res) => {
-      res.sendFile(path.join(__dirname + "/../public/index.html"));
+      res.sendFile(path.join(__dirname, "../public/index.html"));
     });
   }
 
