@@ -1,6 +1,5 @@
 import { body, param } from "express-validator";
 import { validateUserInput, validateItemExistence } from "../fieldValidators";
-import { stringToArray } from "../../helpers/generalSanitizers";
 import {
   eligibleForRolesAddition,
   isArrayOfStrings,
@@ -28,11 +27,9 @@ export const userCreationMiddleware = [
   validateUserInput,
   body("firstName", "El nombre no debe ser numérico").not().isNumeric(),
   validateUserInput,
-  body("imageUrl", "El url de la imagen es requerido").optional().notEmpty(),
+  body("imageURI", "El la imagen es requerida").optional().notEmpty(),
   validateUserInput,
-  body("imageUrl", "El url de la imagen debe ser un url válido")
-    .optional()
-    .isURL(),
+  body("imageURI", "Debe ser una imagen válida").optional().isDataURI(),
   validateUserInput,
   body("lastName", "El apellido es requerido").notEmpty(),
   validateUserInput,
@@ -55,7 +52,6 @@ export const userCreationMiddleware = [
   validateUserInput,
   body("roles", "Los roles son requeridos").optional().notEmpty(),
   validateUserInput,
-  body("roles").optional().customSanitizer(stringToArray),
   body("roles", "Los roles deben ser provistos en un array")
     .optional()
     .isArray(),

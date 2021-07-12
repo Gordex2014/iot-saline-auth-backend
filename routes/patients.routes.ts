@@ -22,19 +22,9 @@ router.get("/", listPatients);
 
 router.get("/:id", validPatientMiddleware, getPatientById);
 
-router.post(
-  "/",
-  upload.single("imageFile"),
-  patientCreationMiddleware,
-  createPatient
-);
+router.post("/", patientCreationMiddleware, createPatient);
 
-router.put(
-  "/:id",
-  upload.single("imageFile"),
-  patientUpdateMiddleware,
-  updatePatient
-);
+router.put("/:id", patientUpdateMiddleware, updatePatient);
 
 router.delete("/:id", validPatientMiddleware, deletePatient);
 
